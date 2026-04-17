@@ -1,0 +1,25 @@
+name: 首次部署测试
+
+on:
+  push:
+    branches: [ main ] # 当推送到 main 分支时触发
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 远程连接并启动服务
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # 进入代码目录
+            cd /www/hackathon/team1
+            # 强制拉取刚刚写的代码
+            git pull origin main
+            # 杀掉旧的进程以防端口冲突
+            fuser -k 8001/tcp || true
+            # 后台启动 Python 网页服务
+            nohup python3 app.py > server.log 2>&1 &
