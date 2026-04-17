@@ -16,7 +16,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # 进入代码目录
-            cd /www/qingyun/qingyun
+            cd /www/qingyun/team1
             # 强制拉取刚刚写的代码
             git pull origin main
             # 杀掉旧的进程以防端口冲突
